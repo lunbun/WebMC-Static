@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>WebMC Debug</title>
+        <script type="text/javascript">
+    window.addEventListener("load", function() {
+        window.minecraftOpts = [
+            "game_frame", "assets.epk",
+            "CgAACQAHc2VydmVycwoAAAABCAAKZm9yY2VkTU9URAAjU3RhbmRhcmQgc3Vydml2YWwgc2VydmVyLCBydW4gYnkgbWUBAAtoaWRlQWRkcmVzcwAIAAJpcAAod3NzOi8vcmVhZGluZ2ZlYXIubWluZWNyYWZ0bm9vYi5jb206ODA4MAgABG5hbWUAFkluc2VydENyZWF0aXZlTmFtZSBTTVAAAA=="
+        ]; 
+
+        const classesSelector = document.getElementById('classes-selector');
+        const classesInput = document.getElementById('classes-input');
+        const startEagler = document.getElementById('start-eagler');
+
+        startEagler.addEventListener('click', async function () {
+            const file = classesInput.files[0];
+            if (!file) {
+                console.error('no classes file specified');
+                return;
+            }
+
+            document.getElementById('classes-selector').remove();
+
+            let source = await file.text();
+            source = source.replace(`var main;`, ``);
+            source = source.replace(`main = $rt_mainStarter(`, `window.main = $rt_mainStarter(`);
+            eval(source);
+
+            if (!main) {
+                console.error('missing main function');
+                return;
+            }
+
+            main();
+        });
+    });
+        </script>
+    </head>
+    <body style="margin:0px;width:100vw;height:100vh;" id="game_frame">
+        <div id="classes-selector">
+            <input type="file" id="classes-input" name="classes-input" accept=".js,application/javascript,text/javascript">
+            <button id="start-eagler">Start Eagler</button>
+        </div>
+    </body>
+</html>
