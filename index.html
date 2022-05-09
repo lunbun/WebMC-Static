@@ -1,18 +1,81 @@
 <!DOCTYPE html>
 <html>
-    <head>
-    <title>WebMC</title>
-        <script type="text/javascript" src="classes-closure.js"></script>
-        <script type="text/javascript">
-window.addEventListener("load", function() {
-    window.minecraftOpts = [
-        "game_frame", "assets.epk",
-        "CgAACQAHc2VydmVycwoAAAABCAAKZm9yY2VkTU9URAAjU3RhbmRhcmQgc3Vydml2YWwgc2VydmVyLCBydW4gYnkgbWUBAAtoaWRlQWRkcmVzcwAIAAJpcAAod3NzOi8vcmVhZGluZ2ZlYXIubWluZWNyYWZ0bm9vYi5jb206ODA4MAgABG5hbWUAFkluc2VydENyZWF0aXZlTmFtZSBTTVAAAA=="
-    ];
-    main();
-});
-        </script>
-    </head>
-    <body style="margin:0px;width:100vw;height:100vh;" id="game_frame">
-    </body>
+<head>
+    <title>Minecraft - ayuncraft fork</title>
+    <script>
+        // Insecurify Content
+        /*window.ActualWebSocket = window.WebSocket;
+        window.WebSocket = function (...args)  {
+            // yes editor has bad identation support.
+            console.log("Recieved ws",args[0],args[1]);
+            if(args[0].startsWith("wss://")) {
+               args[0] = args[0].replace("wss://","ws://");
+               console.log("Downgraded SSL WebSocket to ",args[0]);
+            }
+            return window.ActualWebSocket(...args);
+        }*/
+    </script>
+    <script type="text/javascript" src="https://multiserv.minecraftnoob.com/jsbn/jsbn.js"></script>
+    <script type="text/javascript" src="https://multiserv.minecraftnoob.com/jsbn/jsbn2.js"></script>
+    <script type="text/javascript" src="https://multiserv.minecraftnoob.com/jsbn/base64.js"></script>
+    <script type="text/javascript" src="https://multiserv.minecraftnoob.com/jsbn/prng4.js"></script>
+    <script type="text/javascript" src="https://multiserv.minecraftnoob.com/jsbn/rng.js"></script>
+    <script type="text/javascript" src="https://multiserv.minecraftnoob.com/jsbn/rsa.js"></script>
+    <script type="text/javascript" src="https://multiserv.minecraftnoob.com/jsbn/rsa2.js"></script>
+    <script type="text/javascript" src="https://multiserv.minecraftnoob.com/inflater/build/inflater.js"></script>
+    <script type="text/javascript" src="https://multiserv.minecraftnoob.com/asn1-parser.js"></script>
+    <script type="text/javascript" src="https://multiserv.minecraftnoob.com/music.js"></script>
+    <script type="text/javascript">
+        window.eag_self_proxy = true;//set to true to set the default proxy to the current url
+        //window.eag_proxy_list="";//set to a string of comma-separated proxy ip:port combinations for a custom proxy list
+        var name = "Multiserver", motd = "An experimental multipurpose server",
+            ip = "wss://multiserv.minecraftnoob.com";
+        window.addEventListener("load", function () {
+            document.requestPointerLock = document.requestPointerLock || function () {
+            };
+            document.exitPointerLock = document.exitPointerLock || function () {
+            };
+            window.minecraftOpts = [
+                "game_frame", "assets.epk",
+                btoa(atob("CgAACQAHc2VydmVycwoAAAABCAAKZm9yY2VkTU9URABtb3RkaGVyZQEAC2hpZGVBZGRyZXNzAQgAAmlwAGlwaGVyZQgABG5hbWUAbmFtZWhlcmUAAA==").replace("motdhere", String.fromCharCode(motd.length) + motd).replace("namehere", String.fromCharCode(name.length) + name).replace("iphere", String.fromCharCode(ip.length) + ip))
+            ];
+            (function () {
+                var q = window.location.search;
+                if (typeof q === 'string' && q.startsWith("?")) {
+                    q = new URLSearchParams(q);
+                    var s = q.get("server");
+                    if (s) window.minecraftOpts.push(s);
+                }
+            })();
+
+            const classesSelector = document.getElementById('classes-selector');
+            const classesInput = document.getElementById('classes-input');
+            const startEagler = document.getElementById('start-eagler');
+            startEagler.addEventListener('click', async function () {
+                const file = classesInput.files[0];
+                if (!file) {
+                    console.error('no classes file specified');
+                    return;
+                }
+                classesSelector.remove();
+
+                let source = await file.text();
+                source = source.replace(`var main;`, ``);
+                source = source.replace(`main = $rt_mainStarter(`, `window.main = $rt_mainStarter(`);
+                eval(source);
+                if (!main) {
+                    console.error('missing main function');
+                    return;
+                }
+                main();
+            });
+        });
+    </script>
+</head>
+<body style="margin:0px;width:100vw;height:100vh;" id="game_frame">
+<div id="classes-selector">
+    <input type="file" id="classes-input" name="classes-input" accept=".js,application/javascript,text/javascript">
+    <button id="start-eagler">Start Eagler</button>
+</div>
+</body>
 </html>
