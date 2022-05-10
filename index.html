@@ -60,14 +60,13 @@
                 classesSelector.remove();
 
                 let source = await file.text();
-                source = source.replace(`var main;`, ``);
-                source = source.replace(`main = $rt_mainStarter(`, `window.main = $rt_mainStarter(`);
+                source += '\n;window.startEagler=main;'
                 eval(source);
-                if (!main) {
+                if (!window.startEagler) {
                     console.error('missing main function');
                     return;
                 }
-                main();
+                window.startEagler();
             });
         });
     </script>
