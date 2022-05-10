@@ -28,16 +28,13 @@
     <script type="text/javascript">
         window.eag_self_proxy = true;//set to true to set the default proxy to the current url
         //window.eag_proxy_list="";//set to a string of comma-separated proxy ip:port combinations for a custom proxy list
-        var name = "Multiserver", motd = "An experimental multipurpose server",
-            ip = "wss://multiserv.minecraftnoob.com";
         window.addEventListener("load", function () {
             document.requestPointerLock = document.requestPointerLock || function () {
             };
             document.exitPointerLock = document.exitPointerLock || function () {
             };
             window.minecraftOpts = [
-                "game_frame", "assets.epk",
-                btoa(atob("CgAACQAHc2VydmVycwoAAAABCAAKZm9yY2VkTU9URABtb3RkaGVyZQEAC2hpZGVBZGRyZXNzAQgAAmlwAGlwaGVyZQgABG5hbWUAbmFtZWhlcmUAAA==").replace("motdhere", String.fromCharCode(motd.length) + motd).replace("namehere", String.fromCharCode(name.length) + name).replace("iphere", String.fromCharCode(ip.length) + ip))
+                "game_frame", "assets.epk"
             ];
             (function () {
                 var q = window.location.search;
@@ -60,13 +57,13 @@
                 classesSelector.remove();
 
                 let source = await file.text();
-                source += '\n;window.startEagler=main;'
+                source += '\n;window.runEagler=main;'
                 eval(source);
-                if (!window.startEagler) {
+                if (!window.runEagler) {
                     console.error('missing main function');
                     return;
                 }
-                window.startEagler();
+                window.runEagler();
             });
         });
     </script>
