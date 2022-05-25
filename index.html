@@ -1,20 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Minecraft - ayuncraft fork</title>
-    <script>
-        // Insecurify Content
-        /*window.ActualWebSocket = window.WebSocket;
-        window.WebSocket = function (...args)  {
-            // yes editor has bad identation support.
-            console.log("Recieved ws",args[0],args[1]);
-            if(args[0].startsWith("wss://")) {
-               args[0] = args[0].replace("wss://","ws://");
-               console.log("Downgraded SSL WebSocket to ",args[0]);
-            }
-            return window.ActualWebSocket(...args);
-        }*/
-    </script>
+    <title>custom ayuncraft launcher</title>
     <script type="text/javascript" src="https://filehost.uk.ms/dQw4w9WgXcQ/jsbn/jsbn.js"></script>
     <script type="text/javascript" src="https://filehost.uk.ms/dQw4w9WgXcQ/jsbn/jsbn2.js"></script>
     <script type="text/javascript" src="https://filehost.uk.ms/dQw4w9WgXcQ/jsbn/base64.js"></script>
@@ -34,9 +21,6 @@
             };
             document.exitPointerLock = document.exitPointerLock || function () {
             };
-            window.minecraftOpts = [
-                "game_frame", "assets.epk"
-            ];
             (function () {
                 var q = window.location.search;
                 if (typeof q === 'string' && q.startsWith("?")) {
@@ -48,6 +32,7 @@
 
             const classesSelector = document.getElementById('classes-selector');
             const classesInput = document.getElementById('classes-input');
+            const assetsInput = document.getElementById('assets-input');
             const startEagler = document.getElementById('start-eagler');
             startEagler.addEventListener('click', async function () {
                 const file = classesInput.files[0];
@@ -55,6 +40,9 @@
                     console.error('no classes file specified');
                     return;
                 }
+
+                window.minecraftOpts = [ "game_frame", assetsInput.value ];
+
                 classesSelector.remove();
 
                 let source = await file.text();
@@ -70,9 +58,13 @@
     </script>
 </head>
 <body style="margin:0px;width:100vw;height:100vh;" id="game_frame">
-<div id="classes-selector">
+<div id="classes-selector" style="margin:12px;">
     <input type="file" id="classes-input" name="classes-input" accept=".js,application/javascript,text/javascript">
     <button id="start-eagler">Start Eagler</button>
+
+    <p>advanced options:</p>
+    <label for="assets-input">assets:</label>
+    <input type="text" id="assets-input" name="assets-input" style="width:500px;" value="https://filehost.uk.ms/dQw4w9WgXcQ/assets.epk">
 </div>
 </body>
 </html>
